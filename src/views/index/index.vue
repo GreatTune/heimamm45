@@ -9,14 +9,44 @@
       </div>
       <!-- 右侧 -->
       <div class="header-right">
+        <!-- 头像显示板块 -->
         <img :src="userInfo.avatar" alt />
+        <!-- 昵称显示板块 -->
         <span class="right-text">{{userInfo.username}},您好</span>
-        <el-button @click="getlogout" type="primary" size="small">退出
-        </el-button>
+        <!-- 退出按钮板块 -->
+        <el-button @click="getlogout" type="primary" size="small">退出</el-button>
       </div>
     </el-header>
     <el-container>
-      <el-aside width="200px">Aside</el-aside>
+      <el-aside width="200px">
+        <el-menu
+          default-active="2"
+          class="el-menu-vertical-demo"
+          @open="handleOpen"
+          @close="handleClose"
+        >
+          <el-menu-item index="1">
+            <i class="el-icon-pie-chart"></i>
+            <span slot="title">数据概览</span>
+          </el-menu-item>
+          <el-menu-item index="2">
+            <i class="el-icon-user"></i>
+            <span slot="title">用户列表</span>
+          </el-menu-item>
+          <el-menu-item index="3">
+            <i class="el-icon-edit-outline"></i>
+            <span slot="title">题库列表</span>
+          </el-menu-item>
+          <el-menu-item index="4">
+            <i class="el-icon-office-building"></i>
+            <span slot="title">企业列表</span>
+          </el-menu-item>
+          <el-menu-item index="5">
+            <i class="el-icon-notebook-2"></i>
+            <span slot="title">学科列表</span>
+          </el-menu-item>
+        </el-menu>
+      </el-aside>
       <el-main>Main</el-main>
     </el-container>
   </el-container>
@@ -24,47 +54,56 @@
 
 <script>
 // 导入api方法
-import {info,logout} from '../../api/login.js'
+import { info, logout } from "../../api/login.js";
 // 导入删除token方法
-import {removeToken} from "../../utils/token.js" 
+import { removeToken } from "../../utils/token.js";
 export default {
   data() {
     return {
       // 存储获取得到的用户信息
-      userInfo: {}, 
-    }
+      userInfo: {}
+    };
   },
   created() {
-    info().then(res=>{
-      this.userInfo = res.data.data
+    info().then(res => {
+      this.userInfo = res.data.data;
       // window.console.log(res)
-      this.userInfo.avatar = process.env.VUE_APP_BASEURL + "/" +  this.userInfo.avatar
-    })
+      this.userInfo.avatar =
+        process.env.VUE_APP_BASEURL + "/" + this.userInfo.avatar;
+    });
   },
   methods: {
     // 退出按钮点击事件
-    getlogout(){
-      this.$confirm('您好,退出后需要重新登录!确定退出吗?', '提示', {
-          confirmButtonText: '残忍退出',
-          cancelButtonText: '再考虑考虑',
-          type: 'warning',
-        }).then(() => {
+    getlogout() {
+      this.$confirm("您好,退出后需要重新登录!确定退出吗?", "提示", {
+        confirmButtonText: "残忍退出",
+        cancelButtonText: "再考虑考虑",
+        type: "warning"
+      })
+        .then(() => {
           // 点击确认  调用出退出接口
-          logout().then(res=>{
+          logout().then(res => {
             // window.console.log(res)
             // 点击确认之后 删除token 返回登录页面
-            if(res.data.code === 200) {
+            if (res.data.code === 200) {
               // 清除会话保持 token
-              removeToken()
+              removeToken();
               // 跳转回到login 登录页面
-              this.$router.push("/login")
+              this.$router.push("/login");
             }
-          })
-        }).catch(() => {
+          });
+        })
+        .catch(() => {
           // 点击取消
         });
-      }
-  },
+    },
+    handleOpen(){
+      window.console.log("你好")
+    },
+    handleClose(){
+      window.console.log("你好")
+    }
+  }
 };
 </script>
 
@@ -104,7 +143,7 @@ export default {
       }
       .right-text {
         margin-left: 9px;
-        margin-right: 38px
+        margin-right: 38px;
       }
     }
   }
