@@ -23,7 +23,10 @@
 </template>
 
 <script>
-import {info} from '../../api/login.js'
+// 导入api方法
+import {info,logout} from '../../api/login.js'
+// 导入删除token方法
+import {removeToken} from "../../utils/token.js" 
 export default {
   data() {
     return {
@@ -34,7 +37,7 @@ export default {
   created() {
     info().then(res=>{
       this.userInfo = res.data.data
-      window.console.log(res)
+      // window.console.log(res)
       this.userInfo.avatar = process.env.VUE_APP_BASEURL + "/" +  this.userInfo.avatar
     })
   },
@@ -45,17 +48,20 @@ export default {
           confirmButtonText: '残忍退出',
           cancelButtonText: '再考虑考虑',
           type: 'warning',
-          center: true
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
+          // 点击确认  调用出退出接口
+          logout().then(res=>{
+            // window.console.log(res)
+            // 点击确认之后 删除token 返回登录页面
+            if(res.data.code === 200) {
+              // 清除会话保持 token
+              removeToken()
+              // 跳转回到login 登录页面
+              this.$router.push("/login")
+            }
+          })
         }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
+          // 点击取消
         });
       }
   },

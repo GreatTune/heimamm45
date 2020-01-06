@@ -274,7 +274,7 @@ export default {
               // 否则错误 , 直接提示用户
               this.$message.error(res.data.message);
             }
-            window.console.log(res);
+            // window.console.log(res);
           });
         } else {
           // 其他错误提示
@@ -335,7 +335,7 @@ export default {
         phone: this.registerForm.phone
       }).then(res => {
         this.$message.success("您的验证码是:" + res.data.data.captcha)
-        window.console.log(res);
+        // window.console.log(res);
       });
     },
      // 头像上传
@@ -386,7 +386,7 @@ export default {
             }else if(res.data.code===201){
               this.$message.error(res.data.message)
             }
-            window.console.log(res);
+            // window.console.log(res);
           });
         }
       });

@@ -1,7 +1,7 @@
 // axios 调用
 import axios from "axios"
 // 导入token工具函数
-import {getToken} from '../utils/token.js'
+import {getToken} from '../utils/token'
 // 定义登录方法 并暴露出去 
 export function login(data) {
   return axios({
@@ -43,11 +43,15 @@ export function info(){
     }
   })
 }
-// 定义退出登录方法  并暴露出去
+// 定义用户退出  并暴露出去
 export function logout(){
   return axios({
     url: process.env.VUE_APP_BASEURL + "/logout",
-    method: "post", // 请求类型
+    method: "get", // 请求类型
     withCredentials: true, // 跨域 , 是否携带
+    headers: {
+      // 调用抽取的 token函数来获取token
+      token: getToken()
+    }
   })
 }
