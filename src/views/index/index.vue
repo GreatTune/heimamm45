@@ -9,9 +9,9 @@
       </div>
       <!-- 右侧 -->
       <div class="header-right">
-        <img src="../../assets/02.jpg" alt />
-        <span class="right-text">疑惑猫,您好</span>
-        <el-button @click="getlogout" type="primary" size="small">退出</el-button>
+        <img :src="userInfo.avatar" alt />
+        <span class="right-text">{{userInfo.username}},您好</span>
+        <el-button @click="getlogut" type="primary" size="small">退出</el-button>
       </div>
     </el-header>
     <el-container>
@@ -22,16 +22,25 @@
 </template>
 
 <script>
+import {info} from '../../api/login.js'
 export default {
   data() {
     return {
-      
+      // 存储获取得到的用户信息
+      userInfo: {}, 
     }
+  },
+  created() {
+    info().then(res=>{
+      this.userInfo = res.data.data
+      window.console.log(res)
+      this.userInfo.avatar = process.env.VUE_APP_BASEURL + "/" +  this.userInfo.avatar
+    })
   },
   methods: {
     // 退出按钮点击事件
     getlogout(){
-      
+
     }
   },
 };

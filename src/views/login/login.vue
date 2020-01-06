@@ -132,7 +132,10 @@
 </template>
 
 <script>
+// api导入
 import { login, sendsms, register } from "../../api/login.js";
+// token导入
+import {saveToken} from '../../utils/token.js'
 // 判断手机号输入框输入状态
 const validatephone = (rule, value, callback) => {
   if (value === "") {
@@ -241,7 +244,7 @@ export default {
     // 验证码点击事件  点击验证码图片重新获取验证码
     codeClick() {
       this.codeUrl =`${process.env.VUE_APP_BASEURL}/captcha?type=login&t=${Date.now()}`
-        // process.env.VUE_APP_BASEURL + "/captcha?type=login" + Date.now();
+        
     },
     // 登录按钮点击判断
     submitForm(formName) {
@@ -263,7 +266,9 @@ export default {
             if (res.data.code === 200) {
               // 如果状态提示 200 则正确 , 提示登录成功 同时跳转到首页
               this.$message.success("登录成功");
-              window.localStorage.setItem("heimamm",res.data.data.token);
+              // token存储
+              // window.localStorage.setItem("heimammtoken",res.data.data.token)
+              saveToken(res.data.data.token)
               this.$router.push("/index");
             } else if (res.data.code === 202) {
               // 否则错误 , 直接提示用户
