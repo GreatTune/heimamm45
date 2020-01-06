@@ -67,12 +67,7 @@
           <el-form ref="registerForm" :model="registerForm" :rules="register">
             <!-- 头像上传 -->
             <el-form-item label="头像" prop="avatar" :label-width="formLabelWidth">
-              <el-upload
-                class="avatar-uploader"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :show-file-list="false"
-                :on-success="handleAvatarSuccess"
-                :before-upload="beforeAvatarUpload"
+              <el-upload class="avatar-uploader" :action="uploadURL" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload" name="image"
               >
                 <img v-if="imageUrl" :src="imageUrl" class="avatar" />
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -92,7 +87,7 @@
             </el-form-item>
             <!-- 密码输入框 -->
             <el-form-item label="密码" :label-width="formLabelWidth" prop="password">
-              <el-input v-model="registerForm.password" autocomplete="off"></el-input>
+              <el-input show-password v-model="registerForm.password" autocomplete="off"></el-input>
             </el-form-item>
 
             <el-row>
@@ -126,7 +121,7 @@
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="submitRegisterFrom = false">确 定</el-button>
+            <el-button type="primary" @click="submitRegisterBtn">确 定</el-button>
           </div>
         </el-dialog>
       </div>
@@ -187,9 +182,12 @@ export default {
       },
       // 注册对话框板块
       dialogFormVisible: false,
-      formLabelWidth: "80px",
-      btnMessage: "获取用户验证码",
-      delayTime : 0,
+      formLabelWidth: "80px", 
+      // 按钮的文本
+      btnMessage: "获取用户验证码", 
+      // 定义倒计时的时间
+      delayTime : 0, 
+      uploadURL: process.env.VUE_APP_BASEURL + "/uploads",
       registerForm: {
         username: "", //昵称
         email: "", // 邮箱
@@ -224,7 +222,7 @@ export default {
         // 昵称的验证规则
         username: [{ required: true, message: "请输入昵称", trigger: "change" }],
         // 邮箱的验证规则
-        email: [{ validator: validateEmail, trigger: "change" }],
+        email: [{required: true, validator: validateEmail, trigger: "change" }],
         // 手机号的验证规则
         phone: [{ required: true, validator: validatephone, trigger: "change" }],
         // 密码的验证规则
@@ -242,8 +240,8 @@ export default {
   methods: {
     // 验证码点击事件  点击验证码图片重新获取验证码
     codeClick() {
-      this.codeUrl =
-        process.env.VUE_APP_BASEURL + "/captcha?type=login" + Date.now();
+      this.codeUrl =`${process.env.VUE_APP_BASEURL}/captcha?type=login&t=${Date.now()}`
+        // process.env.VUE_APP_BASEURL + "/captcha?type=login" + Date.now();
     },
     // 登录按钮点击判断
     submitForm(formName) {
@@ -265,6 +263,8 @@ export default {
             if (res.data.code === 200) {
               // 如果状态提示 200 则正确 , 提示登录成功 同时跳转到首页
               this.$message.success("登录成功");
+              window.localStorage.setItem("heimamm",res.data.data.token);
+              this.$router.push("/index");
             } else if (res.data.code === 202) {
               // 否则错误 , 直接提示用户
               this.$message.error(res.data.message);
@@ -292,10 +292,10 @@ export default {
     // 短信获取
     verification() {
       // 手机号判断
-      const reg = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
-      if (!reg.test(this.registerForm.phone)==false) {
+      const reg = /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/;
+      if (reg.test(this.registerForm.phone)==false) {
         // 如果手机号格式不对 则提示用户
-        this.$message.error("手机号码不正确 , 请重新输入!");
+        return this.$message.error("手机号码不正确 , 请重新输入!");
       }
       // 图片验证码
       if (this.registerForm.code.length != 4) {
@@ -325,20 +325,21 @@ export default {
       }
       sendsms({
         // 图形码参数获取
-        code: this.registerForm.imgCode,
+        code: this.registerForm.code,
         // 手机号参数获取
         phone: this.registerForm.phone
       }).then(res => {
+        this.$message.success("您的验证码是:" + res.data.data.captcha)
         window.console.log(res);
       });
     },
-    // 头像上传
+     // 头像上传
     handleAvatarSuccess(res, file) {
       // 生成本地的预览
       this.imageUrl = URL.createObjectURL(file.raw);
       // window.console.log(res)
       // 保存到注册表单的头像中
-      // this.registerForm.avatar = res.data.file_path;
+      this.registerForm.avatar = res.data.file_path;
     },
     beforeAvatarUpload(file) {
       // 上传文件之前的钩子，参数为上传的文件，若返回 false 或者返回 Promise 且被 reject，则停止上传。
@@ -355,7 +356,7 @@ export default {
       return isJPG && isLt2M;
     },
     // 提交注册
-    submitRegisterFrom() {
+    submitRegisterBtn() {
       // 验证表单
       this.$refs.registerForm.validate(valid => {
         // 接口调用
@@ -374,11 +375,17 @@ export default {
             // 获取手机验证码参数
             rcode: this.registerForm.rcode
           }).then(res => {
+            if(res.data.code===200){
+              this.$message.success("恭喜您,已经注册成功!")
+              this.dialogFormVisible=false
+            }else if(res.data.code===201){
+              this.$message.error(res.data.message)
+            }
             window.console.log(res);
           });
         }
       });
-    }
+    },
   }
 };
 </script>
