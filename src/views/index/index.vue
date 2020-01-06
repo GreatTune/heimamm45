@@ -11,7 +11,8 @@
       <div class="header-right">
         <img :src="userInfo.avatar" alt />
         <span class="right-text">{{userInfo.username}},您好</span>
-        <el-button @click="getlogut" type="primary" size="small">退出</el-button>
+        <el-button @click="getlogout" type="primary" size="small">退出
+        </el-button>
       </div>
     </el-header>
     <el-container>
@@ -40,8 +41,23 @@ export default {
   methods: {
     // 退出按钮点击事件
     getlogout(){
-
-    }
+      this.$confirm('您好,退出后需要重新登录!确定退出吗?', '提示', {
+          confirmButtonText: '残忍退出',
+          cancelButtonText: '再考虑考虑',
+          type: 'warning',
+          center: true
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+      }
   },
 };
 </script>
