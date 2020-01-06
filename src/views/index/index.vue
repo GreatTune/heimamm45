@@ -3,7 +3,7 @@
     <el-header>
       <!-- 左侧 -->
       <div class="header-left">
-        <i class="left-icon el-icon-s-fold"></i>
+        <i class="left-icon el-icon-s-fold" @click="collapse=!collapse"></i>
         <img class="left-img" src="../../assets/logo (2).png" alt />
         <span class="left-text">黑马面面</span>
       </div>
@@ -18,12 +18,14 @@
       </div>
     </el-header>
     <el-container>
-      <el-aside width="200px">
+      <!-- 导航菜单 -->
+      <el-aside width="aotu">
         <el-menu
           default-active="2"
           class="el-menu-vertical-demo"
           @open="handleOpen"
           @close="handleClose"
+          :collapse="collapse"
         >
           <el-menu-item index="1">
             <i class="el-icon-pie-chart"></i>
@@ -61,7 +63,9 @@ export default {
   data() {
     return {
       // 存储获取得到的用户信息
-      userInfo: {}
+      userInfo: {},
+      // 是否折叠菜单
+      collapse: false
     };
   },
   created() {
@@ -108,6 +112,11 @@ export default {
 </script>
 
 <style lang="less">
+// 菜单折叠
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+    width: 200px;
+    min-height: 400px;
+  }
 .el-container {
   height: 100%;
   .el-header {
