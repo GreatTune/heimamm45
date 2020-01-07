@@ -144,4 +144,17 @@ export default {
     margin-top: 30px;
   }
 }
+// 对话框
+.el-dialog {
+  .el-dialog__header {
+    background: linear-gradient(
+      225deg,
+      rgba(20, 147, 250, 1),
+      rgba(1, 198, 250, 1)
+    );
+    .el-dialog__title {
+      color: #fff;
+    }
+  }
+}
 </style>

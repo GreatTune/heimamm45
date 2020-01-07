@@ -54,7 +54,7 @@
           </el-form-item>
           <el-button class="el-btn" type="primary" @click="onSubmit">搜索</el-button>
           <el-button @click="removeClick">清除</el-button>
-          <el-button type="primary" icon="el-icon-plus" @click="addClick">新增用户</el-button>
+          <el-button type="primary" icon="el-icon-plus" @click="dialogFormVisible=true">新增试题</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -86,6 +86,53 @@
         :total="total"
       ></el-pagination>
     </el-card>
+    <!-- 对话框 -->
+    <el-dialog title="新增题库测试" :visible.sync="dialogFormVisible" width="900px">
+      <el-form :model="form">
+        <el-form-item label="学科" :label-width="formLabelWidth">
+          <el-select v-model="form.region" placeholder="请选择活动区域">
+            <el-option label="区域一" value="shanghai"></el-option>
+            <el-option label="区域二" value="beijing"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="阶段" :label-width="formLabelWidth">
+          <el-select v-model="form.region" placeholder="请选择活动区域">
+            <el-option label="区域一" value="shanghai"></el-option>
+            <el-option label="区域二" value="beijing"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="企业" :label-width="formLabelWidth">
+          <el-select v-model="form.region" placeholder="请选择活动区域">
+            <el-option label="区域一" value="shanghai"></el-option>
+            <el-option label="区域二" value="beijing"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="城市" :label-width="formLabelWidth">
+          <el-select v-model="form.region" placeholder="请选择活动区域">
+            <el-option label="区域一" value="shanghai"></el-option>
+            <el-option label="区域二" value="beijing"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="题型" :label-width="formLabelWidth">
+          <el-radio-group v-model="radio">
+            <el-radio :label="3">单选</el-radio>
+            <el-radio :label="6">多选</el-radio>
+            <el-radio :label="9">简答</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="难度" :label-width="formLabelWidth">
+          <el-radio-group v-model="radio">
+            <el-radio :label="3">简单</el-radio>
+            <el-radio :label="6">一般</el-radio>
+            <el-radio :label="9">困难</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
   </el-col>
 </template>
 
@@ -93,6 +140,9 @@
 export default {
   data() {
     return {
+      // 单选框
+      radio: 3,
+
       total: 11,
       pageSize: [2, 10, 16, 20],
       currentPage4: 2,
@@ -130,15 +180,19 @@ export default {
           }
         ]
       },
-      value1: ""
+      value1: "",
+
+      // 对话框
+      form: {
+        region: ""
+      },
+      formLabelWidth: "120px",
+      dialogFormVisible: false
     };
   },
 
   methods: {
     onSubmit() {
-      window.console.log("你好");
-    },
-    addClick() {
       window.console.log("你好");
     },
     removeClick() {
@@ -171,23 +225,37 @@ export default {
     margin-top: 30px;
   }
 }
-.el-form-item{
+.el-form-item {
   .el-form-item__label {
     padding-right: 30px;
   }
 }
-.el-form-item__content{
+.el-form-item__content {
   padding-right: 20px;
-.el-select{ 
-  width: 150px;
-}
+  .el-select {
+    width: 150px;
+  }
 
-// 标题输入框
-.form-item__content {
-  width: 388px;
+  // 标题输入框
+  .form-item__content {
+    width: 388px;
+  }
+  .el-btn {
+    margin-left: -20px;
+  }
 }
-.el-btn {
-  margin-left: -20px;
-}
+// 对话框
+
+.el-dialog {
+  .el-dialog__header {
+    background: linear-gradient(
+      225deg,
+      rgba(20, 147, 250, 1),
+      rgba(1, 198, 250, 1)
+    );
+    .el-dialog__title {
+      color: #fff;
+    }
+  }
 }
 </style>
