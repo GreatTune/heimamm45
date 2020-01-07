@@ -55,6 +55,7 @@
 export default {
   data() {
     return {
+      tableData: "",
       total: 11,
       pageSize: [2, 10, 16, 20],
       currentPage4: 2,

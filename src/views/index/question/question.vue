@@ -35,7 +35,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="作者">
-          <el-input v-model="formInline.user"></el-input>
+          <el-input class="el-select" v-model="formInline.user"></el-input>
         </el-form-item>
         <el-form-item label="状态">
           <el-select v-model="formInline.region" placeholder="请选择状态">
@@ -178,7 +178,7 @@ export default {
 }
 .el-form-item__content{
   padding-right: 20px;
-.el-input{ 
+.el-select{ 
   width: 150px;
 }
 
