@@ -20,7 +20,7 @@
     <el-container>
       <!-- 导航菜单 -->
       <el-aside width="aotu">
-        <el-menu router default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="collapse"
+        <el-menu router :default-active="$route.path" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="collapse"
         >
           <el-menu-item index="/index/chart">
             <i class="el-icon-pie-chart"></i>
