@@ -1,5 +1,5 @@
 <template>
-  <el-col>
+  <div class="subject-contentt">
     <el-card shadow="always" class="always">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="学科编号">
@@ -18,9 +18,13 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">搜索</el-button>
-          <el-button @click="removeClick">清除</el-button>
-          <el-button type="primary" icon="el-icon-plus" @click="dialogFormVisible=true">新增学科</el-button>
+          <el-button type="primary">搜索</el-button>
+          <el-button>清除</el-button>
+          <el-button
+            type="primary"
+            icon="el-icon-plus"
+            @click="$refs.addDialog.dialogFormVisible=true"
+          >新增学科</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -39,6 +43,7 @@
           <el-button type="primary">删除</el-button>
         </el-table-column>
       </el-table>
+      <!-- 分页 -->
       <el-pagination
         background
         @size-change="handleSizeChange"
@@ -50,98 +55,32 @@
         :total="total"
       ></el-pagination>
     </el-card>
-    <!-- 对话框 -->
-    <el-dialog title="新增学科" :visible.sync="dialogFormVisible" width="600px" center>
-      <el-form :model="form">
-        <el-form-item label="学科编号" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="学科名称" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="学科简称" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="学科简介" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="学科备注" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-      </div>
-    </el-dialog>
-  </el-col>
+    <addDialog ref="addDialog"></addDialog>
+  </div>
 </template>
 
 <script>
+import addDialog from "./components/addDialog";
 export default {
   data() {
     return {
-      // 对话框
-      form: {
-        name: ""
-      },
-      formLabelWidth: "120px",
-      dialogFormVisible: false,
-
+      // 表单数据
+      tableData: [],
+      // 分页
       total: 11,
       pageSize: [2, 10, 16, 20],
       currentPage4: 2,
       formInline: {
         user: "",
         region: ""
-      },
-      tableData: [
-        {
-          rid: "BAD1",
-          name: "前端与移动开发",
-          username: "王小虎",
-          date: "2016-05-02",
-          status: "启用"
-        },
-        {
-          rid: "BAD1",
-          name: "前端与移动开发",
-          username: "王小虎",
-          date: "2016-05-02",
-          status: "启用"
-        },
-        {
-          rid: "BAD1",
-          name: "前端与移动开发",
-          username: "王小虎",
-          date: "2016-05-02",
-          status: "启用"
-        },
-        {
-          rid: "BAD1",
-          name: "前端与移动开发",
-          username: "王小虎",
-          date: "2016-05-02",
-          status: "启用"
-        },
-        {
-          rid: "BAD1",
-          name: "前端与移动开发",
-          username: "王小虎",
-          date: "2016-05-02",
-          status: "启用"
-        }
-      ]
+      }
     };
+  },
+  components: {
+    addDialog
   },
 
   methods: {
-    onSubmit() {
-      window.console.log("你好");
-    },
-    removeClick() {
-      window.console.log("你好");
-    },
     handleSizeChange(val) {
       window.console.log(`每页 ${val} 条`);
     },
@@ -153,32 +92,21 @@ export default {
 </script>
 
 <style lang="less">
-.always {
-  margin-bottom: 19px;
-}
-.el-main {
-  background-color: #e8e9ec;
-  .el-col-8 {
-    width: 100%;
+.subject-content {
+  .always {
+    margin-bottom: 19px;
   }
-}
-.el-card__body {
-  .is-background {
-    display: flex;
-    justify-content: center;
-    margin-top: 30px;
+  .el-main {
+    background-color: #e8e9ec;
+    .el-col-8 {
+      width: 100%;
+    }
   }
-}
-// 对话框
-.el-dialog {
-  .el-dialog__header {
-    background: linear-gradient(
-      225deg,
-      rgba(20, 147, 250, 1),
-      rgba(1, 198, 250, 1)
-    );
-    .el-dialog__title {
-      color: #fff;
+  .el-card__body {
+    .is-background {
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
     }
   }
 }

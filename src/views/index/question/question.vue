@@ -87,7 +87,7 @@
       ></el-pagination>
     </el-card>
     <!-- 对话框 -->
-    <el-dialog title="新增题库测试" :visible.sync="dialogFormVisible" width="900px">
+    <el-dialog title="新增题库测试" :visible.sync="dialogFormVisible" fullscreen=true center>
       <el-form :model="form">
         <el-form-item label="学科" :label-width="formLabelWidth">
           <el-select v-model="form.region" placeholder="请选择活动区域">
