@@ -1,7 +1,7 @@
   // 导入axios
 import axios from 'axios'
 // 导入 token
-import {getToken} from '../utils/token.vue'
+import { getToken } from "../utils/token.js"
 
 // 创建一个学科列表的对象
 const subjectRequest =  axios.create({
@@ -10,12 +10,12 @@ const subjectRequest =  axios.create({
 
 // 拦截器
 // 添加请求拦截器
-subjectRequest.interceptors.Request.use(
+subjectRequest.interceptors.request.use(
   function(config) {
     // 在发送之前 干一些事情
     // 设置请求头 携带 token
     config.headers.token = getToken()
-    return config
+    return config;
   },
   function(error) {
     // 在请求错误的时候 干一些事情
